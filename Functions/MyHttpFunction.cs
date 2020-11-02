@@ -7,22 +7,23 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace Functions
 {
-    public static class MyHttpFunction
+    public class MyHttpFunction
     {
         private readonly HttpClient _client;
         private readonly IMyService _service;
 
-        public MyHttpTrigger(HttpClient httpClient, IMyService service)
+        public MyHttpFunction(HttpClient httpClient, IMyService service)
         {
             this._client = httpClient;
             this._service = service;
         }
 
         [FunctionName("MyHttpFunction")]
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
@@ -33,6 +34,9 @@ namespace Functions
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             name = name ?? data?.name;
+
+            var response = await _client.GetAsync("https://microsoft.com");
+            var message = _service.GetMessage();
 
             return name != null
                 ? (ActionResult)new OkObjectResult($"Hello, {name}")
