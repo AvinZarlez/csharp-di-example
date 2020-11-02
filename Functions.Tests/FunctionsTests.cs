@@ -9,7 +9,7 @@ namespace Functions.Tests
     {
         private readonly ILogger logger = TestFactory.CreateLogger();
 
-        private readonly HttpClient mockHttp;
+        private readonly HttpClient mockHttp = new HttpClient();
         private readonly IMyService mockService;
 
         private readonly MyHttpFunction myFunction = new MyHttpFunction(mockHttp, mockService);
