@@ -16,7 +16,7 @@ namespace Functions
                 return new MyService();
             });
 
-            builder.Services.AddSingleton<ILoggerProvider, MyLoggerProvider>();
+            //builder.Services.AddSingleton<ILoggerProvider, MyLoggerProvider>();
         }
     }
 }
